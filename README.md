@@ -1,3 +1,3 @@
-# devProject
+# devServ
 ---------------------------------------------------------------------
 ### Building and running application
