@@ -5,6 +5,20 @@ on:
     branches: 
       - "development"
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - warning
+          - critical
+      tags:
+        description: 'Purpose of Run This Workflow?'
+        required: false
+        type: string
 
 jobs:
   build-and-push:
@@ -77,17 +91,12 @@ jobs:
           echo "IMAGE_NAME=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
 # Tag Docker Image and push to ECR
-      - name: Push Dicker image to Amazon ECR
+      - name: Push Docker image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
           ECR_REPOSITORY: dev-reading-service
           IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         run: |
-          # Tag the image as latest
-          # It’s worth noting that relying on the latest tag in production can be risky, as it might lead to unpredicted behaviors 
-          # if the image changes unexpectedly.
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          # Push the specific version tag
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          # Push the latest tag
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
