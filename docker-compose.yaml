@@ -2,7 +2,7 @@ version: '2.4'  # The last version of Docker Compose file format that directly s
 services:
   counter-service:
     container_name: dev-reading-service
-    image: <aws_account_id>.dkr.ecr.eu-west-1.amazonaws.com/counter-service-exercise:latest
+    image: <aws_account_id>.dkr.ecr.eu-west-1.amazonaws.com/dev-reading-service:latest
     volumes:
       - ./data:/data
     ports:
